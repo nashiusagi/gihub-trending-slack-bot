@@ -1,13 +1,13 @@
 // import * as cdk from 'aws-cdk-lib';
 // import { Template } from 'aws-cdk-lib/assertions';
-// import * as Iac from '../lib/iac-stack';
+// import * as LambdaGithubTrendsBot from '../lib/lambda-github-trends-bot-stack';
 
 // example test. To run these tests, uncomment this file along with the
-// example resource in lib/iac-stack.ts
+// example resource in lib/lambda-github-trends-bot-stack.ts
 test('SQS Queue Created', () => {
 //   const app = new cdk.App();
 //     // WHEN
-//   const stack = new Iac.IacStack(app, 'MyTestStack');
+//   const stack = new LambdaGithubTrendsBot.LambdaGithubTrendsBotStack(app, 'MyTestStack');
 //     // THEN
 //   const template = Template.fromStack(stack);
 

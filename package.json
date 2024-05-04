@@ -1,8 +1,8 @@
 {
-  "name": "iac",
+  "name": "lambda-github-trends-bot",
   "version": "0.1.0",
   "bin": {
-    "iac": "bin/iac.js"
+    "lambda-github-trends-bot": "bin/lambda-github-trends-bot.js"
   },
   "scripts": {
     "build": "tsc",
@@ -22,6 +22,7 @@
   "dependencies": {
     "aws-cdk-lib": "2.131.0",
     "constructs": "^10.0.0",
+    "hono": "^4.3.0",
     "source-map-support": "^0.5.21"
   }
 }
