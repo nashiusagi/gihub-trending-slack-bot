@@ -1,11 +1,10 @@
 import { parse } from "node-html-parser";
 
 export const useParser = async (body: string) => {
-	const startTime = Date.now();
 	const root = parse(body);
+
 	// querySelectorAllよりgetElementsByTagNameが速い
 	const articles = root.getElementsByTagName("h2");
-	console.log(articles);
 
 	const trends = await Promise.all(
 		articles
@@ -13,7 +12,6 @@ export const useParser = async (body: string) => {
 			.filter((text) => text.includes("/"))
 			.map((textDirty, idx) => {
 				const repoName = textDirty ? cleanInnerText(textDirty) : "";
-				console.log(repoName);
 
 				return {
 					rank: idx + 1,
@@ -22,8 +20,6 @@ export const useParser = async (body: string) => {
 				};
 			}),
 	);
-	const endTime = Date.now();
-	console.log("parsing time: ", endTime - startTime);
 
 	return trends;
 };

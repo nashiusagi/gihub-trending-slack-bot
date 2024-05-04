@@ -12,12 +12,10 @@ const feeding = async (
 	slackBotToken: string,
 	slackBotTargetChannelName: string,
 ): Promise<string> => {
-	console.log("start fetching...");
 	const result = await useFetch({
 		url: targetUrl,
 		options: {},
 	});
-	console.log(result);
 
 	const repos = {
 		articles: await useParser(result),
