@@ -90,3 +90,24 @@ jobs:
 
       - name: test
         run: bun test
+
+  deploy_check:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '16.x'
+
+      - name: install dependencies
+        run: npm install
+
+      - name: cdk diff
+        run: npm run cdk:diff
+        env:
+          AWS_DEFAULT_REGION: 'ap-northeast-1'
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
