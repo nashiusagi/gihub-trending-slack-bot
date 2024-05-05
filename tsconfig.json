@@ -8,6 +8,8 @@
     "moduleDetection": "force",
     "jsx": "react-jsx",
     "allowJs": true,
+    "declaration": true,
+		"declarationMap": true,
 
     // Bundler mode
     "moduleResolution": "bundler",
@@ -25,6 +27,8 @@
     "noUnusedParameters": true,
     "noPropertyAccessFromIndexSignature": true
   },
+  "include": ["./lambda/**/*.ts"],
+  "files": ["./lambda/types/env.ts"],
   "exclude": [
     "node_modules",
     "cdk.out"

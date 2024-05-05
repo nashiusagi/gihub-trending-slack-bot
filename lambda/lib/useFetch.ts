@@ -58,9 +58,3 @@ const handleServerSideErrors = async (
       return new Failure(new Error("Unhandled Error"));
   }
 };
-
-const hasJsonContent = (res: Response): boolean => {
-  const contentType = res.headers.get("Content-Type");
-
-  return !!contentType?.includes("application/json");
-};

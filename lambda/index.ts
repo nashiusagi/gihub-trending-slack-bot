@@ -50,8 +50,8 @@ const feeding = async (
 
 app.get("/", async (c) => {
   const repos = await feeding(
-    process.env.SLACK_BOT_ACCESS_TOKEN,
-    process.env.SLACK_BOT_ACCESS_CHANNEL,
+    process.env.SLACK_BOT_ACCESS_TOKEN ?? "",
+    process.env.SLACK_BOT_ACCESS_CHANNEL ?? "",
   );
   return c.text(repos);
 });
