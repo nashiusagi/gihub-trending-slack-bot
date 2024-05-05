@@ -6,6 +6,7 @@ test("fetch", async () => {
     url: "http://api.randomuser.me/",
     options: {},
   });
+  const resultJson = JSON.parse(result);
 
-  expect(result).toBeTruthy(true);
+  expect(resultJson.results.length).toBe(1);
 });
