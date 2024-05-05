@@ -64,7 +64,7 @@ jobs:
 
       - name: lint
         run: bun lint
-      
+
   unit_test:
     runs-on: ubuntu-22.04
     needs: setup

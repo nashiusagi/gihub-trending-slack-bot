@@ -24,8 +24,19 @@
       "./node_modules/@types"
     ]
   },
+  "include": ["./lambda/**/*.ts"],
+  "files": ["./lambda/types/env.ts"],
   "exclude": [
     "node_modules",
     "cdk.out"
+  ],
+  "lib": [
+    "ESNext",
+    "DOM",
+    "DOM.Iterable"
+  ],
+  "types": [
+    "web",
+    "bun-types"
   ]
 }
