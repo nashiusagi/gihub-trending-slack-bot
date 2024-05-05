@@ -1,14 +1,29 @@
-# Welcome to your CDK TypeScript project
+# GitHub Trending Slack Bot with AWS Lambda
 
-This is a blank project for CDK development with TypeScript.
+Post Daily GitHub Trend Repositories to the specific Slack channel.
 
-The `cdk.json` file tells the CDK Toolkit how to execute your app.
+## NOTE
+This project is temporally focused on TypeScript Trending.  
+Other languages will be focused on in the near future...
 
-## Useful commands
+## Requirements
+* Bun: `^1.0`
 
-* `npm run build`   compile typescript to js
-* `npm run watch`   watch for changes and compile
-* `npm run test`    perform the jest unit tests
-* `npx cdk deploy`  deploy this stack to your default AWS account/region
-* `npx cdk diff`    compare deployed stack with current state
-* `npx cdk synth`   emits the synthesized CloudFormation template
+## Installation
+```shell
+$ bun install
+```
+
+## Deployment
+```shell
+$ cdk deploy
+```
+
+After deployment, you should configure environment variables below.
+* SLACK_BOT_ACCESS_CHANNEL: target Slack channel to post
+* SLACK_BOT_ACCESS_TOKEN: Slack Access Token
+
+## Testing
+```
+$ bun test
+```
