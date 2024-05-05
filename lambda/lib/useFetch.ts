@@ -7,17 +7,17 @@ interface FetchRequest {
 
 export const useFetch = (request: FetchRequest) => {
   return fetch(request.url, request.options)
-    .catch((e) => {
-      console.error(e);
-      throw Error(e);
-    })
     .then(handleServerSideErrors)
     .then((result) => {
       if (result.isSuccess()) {
         const response = result.value;
         return response.text();
       }
-      return "invalid response";
+      return result.error.message;
+    })
+    .catch((e) => {
+      console.error(e);
+      return "Network Error";
     });
 };
 
@@ -28,6 +28,7 @@ export const useFetch = (request: FetchRequest) => {
 const handleServerSideErrors = async (
   res: Response,
 ): Promise<Result<Response, Error>> => {
+  if (!res) return new Failure(new Error("Abort Error"));
   if (res.ok) return new Success(res);
 
   switch (res.status) {
