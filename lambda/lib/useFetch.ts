@@ -5,6 +5,10 @@ interface FetchRequest {
   options: object;
 }
 
+/**
+ * NOTE: Resultで返すと呼び出し元でハンドリングが複雑になるため、
+ * ここでは簡略化のためにPromise<string>を返している
+ */
 export const useFetch = (request: FetchRequest) => {
   return fetch(request.url, request.options)
     .then(handleServerSideErrors)
@@ -13,11 +17,11 @@ export const useFetch = (request: FetchRequest) => {
         const response = result.value;
         return response.text();
       }
-      return result.error.message;
+      return Promise.resolve(result.error.message);
     })
     .catch((e) => {
       console.error(e);
-      return "Network Error";
+      return Promise.resolve("Network Error");
     });
 };
 
