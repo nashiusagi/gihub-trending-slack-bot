@@ -64,6 +64,32 @@ jobs:
 
       - name: lint
         run: bun lint
+
+  type_check:
+    runs-on: ubuntu-22.04
+    needs: setup
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: setup bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: 1.0.11
+
+      - name: restore cache 
+        id: restore-cache
+        uses: actions/cache/restore@v4
+        with:
+          path: ./node_modules
+          key: ${{ runner.os }}-bun-${{ hashFiles('bun.lockb') }}
+
+      - name: exit if cache does not hit
+        if: steps.restore-cache.outputs.cache-hit != 'true'
+        run: exit 1
+
+      - name: type check
+        run: bun tsc --noEmit
       
   unit_test:
     runs-on: ubuntu-22.04
