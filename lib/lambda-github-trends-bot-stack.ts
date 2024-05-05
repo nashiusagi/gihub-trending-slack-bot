@@ -3,6 +3,8 @@ import { Construct } from 'constructs';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as apigw from 'aws-cdk-lib/aws-apigateway'
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
+import { Rule, Schedule } from 'aws-cdk-lib/aws-events';
+import { LambdaFunction } from 'aws-cdk-lib/aws-events-targets';
 
 export class LambdaGithubTrendsBotStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -18,6 +20,12 @@ export class LambdaGithubTrendsBotStack extends cdk.Stack {
     })
     new apigw.LambdaRestApi(this, 'myapi', {
       handler: fn,
+    })
+
+    // Eventbridge rules
+    new Rule(this, 'schedule-cron-github-trends', {
+      schedule: Schedule.cron({ minute: '0', hour: '0'}),
+      targets: [new LambdaFunction(fn)]
     })
   }
 }
