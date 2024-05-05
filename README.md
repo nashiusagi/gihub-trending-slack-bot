@@ -9,6 +9,9 @@ Other languages will be focused on in the near future...
 ## Requirements
 * Bun: `^1.0`
 
+## Architecture
+![architecture](img/architecture.png)
+
 ## Installation
 ```shell
 $ bun install
