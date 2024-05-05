@@ -1,7 +1,7 @@
 import { expect, test } from "bun:test";
 import { useFetch } from "../useFetch";
 
-test("fetch", async () => {
+test("useFetchのテスト", async () => {
   const result = await useFetch({
     url: "http://api.randomuser.me/",
     options: {},
