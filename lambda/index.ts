@@ -2,18 +2,20 @@ import { Hono } from "hono";
 import { handle } from "hono/aws-lambda";
 import { useFetch } from "./lib/useFetch";
 import { useParser } from "./lib/useParser";
-import type { Bindings, Attachment, Payload } from "./types";
+import type { Bindings, Attachment, Payload, ProgramLanguage } from "./types";
 
 const app = new Hono<{ Bindings: Bindings }>();
 
-const targetUrl = "https://github.com/trending/typescript?since=daily";
+const buildTargetUrl = (lang: ProgramLanguage): string =>
+  `https://github.com/trending/${lang}?since=daily`;
 
 const feeding = async (
   slackBotToken: string,
   slackBotTargetChannelName: string,
+  lang: ProgramLanguage,
 ): Promise<string> => {
   const result = await useFetch({
-    url: targetUrl,
+    url: buildTargetUrl(lang),
     options: {},
   });
 
@@ -21,7 +23,7 @@ const feeding = async (
     articles: await useParser(result),
   };
   const attachment: Attachment = {
-    title: "GitHub Trending [ TypeScript ] ",
+    title: `GitHub Trending [ ${lang} ] `,
     text: JSON.stringify(repos),
     author_name: "GitHub Trending Feeder",
     color: "#00FF00",
@@ -49,11 +51,17 @@ const feeding = async (
 };
 
 app.get("/", async (c) => {
-  const repos = await feeding(
-    process.env.SLACK_BOT_ACCESS_TOKEN ?? "",
-    process.env.SLACK_BOT_ACCESS_CHANNEL ?? "",
+  const languages: Array<ProgramLanguage> = ["typescript", "scala", "go"];
+  const trendingRepos = await Promise.all(
+    languages.map((lang) => {
+      return feeding(
+        process.env.SLACK_BOT_ACCESS_TOKEN ?? "",
+        process.env.SLACK_BOT_ACCESS_CHANNEL ?? "",
+        lang,
+      );
+    }),
   );
-  return c.text(repos);
+  return c.text(String(trendingRepos));
 });
 
 export const handler = handle(app);

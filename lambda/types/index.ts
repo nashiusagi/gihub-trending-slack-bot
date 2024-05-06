@@ -49,4 +49,4 @@ export class Failure<E extends Error> {
   }
 }
 
-type ProgramLanguage = "typescript" | "scala" | "go"
+export type ProgramLanguage = "typescript" | "scala" | "go";
