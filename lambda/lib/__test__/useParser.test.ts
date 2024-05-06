@@ -11,7 +11,7 @@ const Body = `
 
 test("useParserのテスト", async () => {
   const result = await useParser(Body);
-  console.log(result)
+  console.log(result);
 
   expect(result.length).toBe(3);
 });

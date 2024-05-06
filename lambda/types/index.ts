@@ -48,3 +48,7 @@ export class Failure<E extends Error> {
     return true;
   }
 }
+
+export const ProgramLanguagesArray = ["typescript", "scala", "go"] as const;
+
+export type ProgramLanguageType = (typeof ProgramLanguagesArray)[number];
