@@ -1,18 +1,25 @@
 import { Hono } from "hono";
 import { handle } from "hono/aws-lambda";
+import { HTTPException } from "hono/http-exception";
 import { useFetch } from "./lib/useFetch";
 import { useParser } from "./lib/useParser";
-import type { Bindings, Attachment, Payload, ProgramLanguage } from "./types";
+import {
+  type Bindings,
+  type Attachment,
+  type Payload,
+  type ProgramLanguageType,
+  ProgramLanguagesArray,
+} from "./types";
 
 const app = new Hono<{ Bindings: Bindings }>();
 
-const buildTargetUrl = (lang: ProgramLanguage): string =>
+const buildTargetUrl = (lang: ProgramLanguageType): string =>
   `https://github.com/trending/${lang}?since=daily`;
 
 const feeding = async (
   slackBotToken: string,
   slackBotTargetChannelName: string,
-  lang: ProgramLanguage,
+  lang: ProgramLanguageType,
 ): Promise<string> => {
   const result = await useFetch({
     url: buildTargetUrl(lang),
@@ -50,10 +57,15 @@ const feeding = async (
   return JSON.stringify(repos);
 };
 
+const isTargetProgramLanguage = (
+  language: string,
+): language is ProgramLanguageType => {
+  return ProgramLanguagesArray.some((value) => value === language);
+};
+
 app.get("/", async (c) => {
-  const languages: Array<ProgramLanguage> = ["typescript", "scala", "go"];
   const trendingRepos = await Promise.all(
-    languages.map((lang) => {
+    ProgramLanguagesArray.map((lang) => {
       return feeding(
         process.env.SLACK_BOT_ACCESS_TOKEN ?? "",
         process.env.SLACK_BOT_ACCESS_CHANNEL ?? "",
@@ -62,6 +74,21 @@ app.get("/", async (c) => {
     }),
   );
   return c.text(String(trendingRepos));
+});
+
+app.get("/:language", async (c) => {
+  const language: string = c.req.param("language");
+  if (!isTargetProgramLanguage(language)) {
+    throw new HTTPException(400, { message: "Unsupported Language" });
+  }
+
+  const repos = await feeding(
+    process.env.SLACK_BOT_ACCESS_TOKEN ?? "",
+    process.env.SLACK_BOT_ACCESS_CHANNEL ?? "",
+    language,
+  );
+
+  return c.text(repos);
 });
 
 export const handler = handle(app);
