@@ -3,6 +3,8 @@ import { handle } from "hono/aws-lambda";
 import { HTTPException } from "hono/http-exception";
 import { useFetch } from "./lib/useFetch";
 import { useParser } from "./lib/useParser";
+import { buildTargetUrl } from "./lib/buildTargetUrl";
+import { useTypeChecker } from "./lib/useTypeChecker";
 import {
   type Bindings,
   type Attachment,
@@ -13,8 +15,7 @@ import {
 
 const app = new Hono<{ Bindings: Bindings }>();
 
-const buildTargetUrl = (lang: ProgramLanguageType): string =>
-  `https://github.com/trending/${lang}?since=daily`;
+const { isTargetProgramLanguage } = useTypeChecker();
 
 const feeding = async (
   slackBotToken: string,
@@ -55,12 +56,6 @@ const feeding = async (
   });
 
   return JSON.stringify(repos);
-};
-
-const isTargetProgramLanguage = (
-  language: string,
-): language is ProgramLanguageType => {
-  return ProgramLanguagesArray.some((value) => value === language);
 };
 
 app.get("/", async (c) => {
